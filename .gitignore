@@ -1,0 +1,12 @@
+# Окружение
+.venv/
+.env
+# Кеши и логи
+__pycache__/
+*.pyc
+*.pyo
+logs/
+*.log
+# IDE
+.vscode/
+.idea/

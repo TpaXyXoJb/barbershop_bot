@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - redis
+    environment:
+      - PYTHONPATH=/app
+
+      - .env
+    volumes:
+      - .:/app
+    restart: always
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bot_db
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:latest
+    restart: always
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: poetry run celery -A bot.tasks worker --loglevel=info
+    depends_on:
+      - redis
+    environment:
+      - PYTHONPATH=/app
+
+      - .env
+    volumes:
+      - .:/app
+
+volumes:
+  pg_data:

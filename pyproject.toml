@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "hit-haircut-bot"
+version = "0.1.0"
+description = ""
+authors = ["TpaXyXoJb <salnikovne@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiogram = "^3.19.0"
+asyncpg = "^0.30.0"
+redis = "^5.2.1"
+celery = "^5.4.0"
+alembic = "^1.15.1"
+loguru = "^0.7.3"
+pydantic = "^2.10.6"
+pytest = "^8.3.5"
+factory-boy = "^3.3.3"
+sqlalchemy = "^2.0.39"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
