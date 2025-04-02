@@ -12,6 +12,7 @@ fake_services = {
     "Мужские стрижки": ["Классическая", "Под машинку", "Fade"],
     "Женские стрижки": ["Каре", "Пикси", "Каскад"]
 }
+fake_times = ["10:00", "11:00", "12:00", "14:00", "15:00", "16:00"]
 
 
 def get_masters_keyboard() -> InlineKeyboardMarkup:
@@ -61,6 +62,17 @@ def get_dates_keyboard() -> InlineKeyboardMarkup:
     return keyboard
 
 
+def get_time_keyboard() -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=time, callback_data=f"select_time:{time}")]
+        for time in fake_times
+    ])
+    keyboard.inline_keyboard.append([
+        InlineKeyboardButton(text="🔙 Назад", callback_data="book_appointment")
+    ])
+    return keyboard
+
+
 @router.callback_query(F.data == "book_appointment")
 async def choose_master(callback: types.CallbackQuery):
     await callback.message.edit_text(
@@ -103,5 +115,15 @@ async def choose_date(callback: types.CallbackQuery):
     await callback.message.edit_text(
         f"Услуга: {service}\nВыберите дату:",
         reply_markup=get_dates_keyboard()
+    )
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith("select_date:"))
+async def choose_time(callback: types.CallbackQuery):
+    date = callback.data.split(":")[1]
+    await callback.message.edit_text(
+        f"Дата: {date}\nВыберите время:",
+        reply_markup=get_time_keyboard()
     )
     await callback.answer()
